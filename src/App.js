@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import CardList from './CardList';
 import SearchBox from './SearchBox';
-import { robots } from './robots';
 import './App.css';
 
 
@@ -10,10 +9,18 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            robots: robots,
+            robots: [],
             searchField: '',
         }
     }
+
+    // "fetch" users details from an external API, decode the response and update the
+    // state to include the new robot details.
+    componentDidMount() {
+        fetch('https://jsonplaceholder.typicode.com/users')
+            .then(response => response.json())
+            .then(users => this.setState({robots: users}));
+    };
 
     // When the contents of the search box changes, update the searchField state
     onSearchChange = (event) => this.setState({ searchField: event.target.value });
@@ -29,8 +36,8 @@ class App extends Component {
                 <SearchBox searchChange={this.onSearchChange}/>
                 <CardList robots={filteredRobots}/>
             </div>
-        )
-    }
+        );
+    };
 }
 
 export default App;
